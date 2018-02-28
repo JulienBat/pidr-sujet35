@@ -1,0 +1,42 @@
+Introduction
+The number of mobile device has increased a lot this years, and so do the number of applications on them. But it comes with some security issues that users usually can’t deal. So some on-device and cloud-based solutions showed up, but they do not adapt the security policies needed.
+So there is our solution that chained security function with Software Defined Networking and Openflow protocol. There is the three points we worked on : i) a strategy for clustering mobile apps and choosing security functions, ii) mathematical  model  for  defining  and  partitioning security  compositions  between  in-cloud  and  on-device, iii) a running prototype
+
+Problem Statement
+There is three actors, a mobile device with a lightweight agent, a cloud with security functions, and the remote destination that apps are communicating with. When an app want to communicate to the network, his traffic can be redirected (on both side) to some security functions.
+The first step is to have a better understanding of the communications of the apps, to get an idea of the security functions to apply. The second step is to optimize the deployment between the cloud and the mobile device, to avoid to consume too much resources (battery, CPU) on the device.
+
+Mobile apps network communication patterns
+We previously developed a monitoring platform for network data of android apps to collect some data.
+So we decided to select these features for clustering app:
+traffic in/out ratio, unique count of server addresses, unique count of server ports, % of application traffic, % of CDN/Cloud traffic(AWS…),% of Google Service Framework traffic, % of advertisements traffic, % of analytics traffic, % of HTTP traffic, % of HTTPS traffic, % of other traffic.
+To choose the clusters, we used and compared three clustering algorithm, hierarchical clustering, K-medoids and Self-Organizing Maps. At the end, we have got 6 clusters with K-medoids algorithm :
+1)Google services framework : apps traffic, mostly HTTPS
+2)Google and social networks : mostly apps traffic, some CDN, fully HTTPS
+3)Mobile device management : Google and apps/CDN traffic, no HTTP(S)
+4)Messaging : (whatsapp …) mostly CDN, mix of HTTP(S) and other ports
+5)Utilities : (meteo …) CDN and analytics traffic, mostly HTTP
+6)Gaming and multimedia : mainly CDN traffic, plus advertisement and analytics traffic, mostly HTTP
+We consider the use of these clusters to select appropriate security functions : 1) Firewall, 2) TLS proxy and Intrusion Detection/Prevention System, 3) Firewall and Deep Packet Inspection, 4) Firewall and Intrusion Detection System, 5) Firewall and Data Leakage Prevention engine, 6) Firewall, Intrusion Prevention System and Data Leakage Prevention engine
+
+Partitioning Mobile Security Compositions
+A security composition C can be formalized by a composition graph Gc=(V,E) with V={sf1,sf2,...,sfn} (sfi are security functions) and E={tc1,tc2,...,tcm} (tci are the controls flows transmissions between there corresponding security functions).
+We supposed that cloud resources are unlimited, but they are not on mobile device so we expressed the average cost of every security functions on mobile : Wcpu(sfi) the average CPU usage, Wbatt(sfi) the average battery usage, and Wdelay(sfi) the average processing time.
+We also expressed the potential reward of running a security function on device, with SIGMAcpu(sfi)=(alpha^t)/Wcpu(sfi) and SIGMAbatt(sfi)=(beta^t)/Wbatt(sfi). alpha and beta are the CPU and battery cost required for a communication transmission.
+Winfo is the  amount  of  security  information  to  be transmitted  to  the  following  security  function.
+Cdev is the on-device part of C, and Ccld the in-cloud one.
+A  partition P can  be  represented  as  a  subgraph Gcpart=(Vpart,Epart) of Gc. Gcpart must be a connected subgraph, and it must avoid round-trip between the device and the cloud.
+To choose efficiently Cdev, there is two solution. First, respecting a constraint, for exemple WbattMax. Second, solving an optimization problem. We leave for future work a deeper study of these solutions.
+
+Prototyping and Evaluation
+Our prototype was composed of a samsung galaxy S4, a Mininet emulator, and a set of three custom application servers.
+We used four instance of security functions : a firewall implementing IP blacklisting, two Intrusion Prevention System, and a basic Data Leakage Prevention engine.
+We only secured the smartphone outgoing traffic.
+We defined four potential cuts : NoCut (all security functions in the network), Cut1 (the firewall is in the device), Cut2 (the firewall and the light IPS are in the device), and Cut3 (the firewall and both light and heavy IPS are on the device)
+The first experiment considers impact on the device battery. With no blocking rate, the four cuts used more battery than the baseline. But when we used an higher blocking rate, the use of battery decreased significantly, NoCut and Cut1 even used less battery than baseline with a blocking rate higher than 20%. There were not much difference between NoCut and Cut1, and Cut3 was always the one which cost the more battery.
+The second experiment focused on CPU usage. We observed that the switch (IP redirection, in all cuts) footprint is relatively significant (up to 7%), particularly when the blocking rate is low. We also observed that the switch CPU usage is higher than the firewall’s one.
+The last experiment deals with the application RTT. We can observe that security functions, when run on the device, proportionally add a small delay overhead. The redirection was what adds the most delay.
+
+Conclusions
+Mobile devices security is a critical issue, so we proposed in this paper an approach based on compositions of security functions.
+For future work, we plan to study different optimization and clustering algorithms.

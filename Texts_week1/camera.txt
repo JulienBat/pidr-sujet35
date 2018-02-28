@@ -1,0 +1,5 @@
+To face the ever-growing number of smart objects and the sharply increasing number of malicious applications, we need to update our security mechanisms.
+And software-defined networks (SDN) look to have interesting potential. In these SDN, lots of security functions are concentrated in the network. SDN separate the data plane, security functions in the switches from the control plane, all underlying mechanisms of automatic changes of the configuration of the data plane.
+This document specify about automated verification strategy, translating algorithms from security chains to formal models and evaluation of performance.
+
+Automated verification strategies main goal is to avoid any misconfiguration in the network. The purposed architecture contains three main groups : the target device connected to a cloud provider infrastructure which include most of the security functions and is connected  to the destination. A security manager, including SDN Controller and Synaptic Checker, check data plane coming from the Internet Cloud. Addionally, some security function to protect the control plane in adiionn to a Kinetic extension.

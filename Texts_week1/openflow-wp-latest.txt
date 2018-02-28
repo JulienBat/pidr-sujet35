@@ -1,0 +1,21 @@
+The need for programmable networks
+Due to the critical aspect of the networks in our society, it have become more and more difficult for new ideas to be tested with realistic settings. And so there is no much real innovation.
+So a new solution for experimenting showed up, GENI, a nationwide research facility for experimenting with new network architectures and distributed systems. That type of system, with programmable switches and routers that permit virtualized programmable network could increase the innovation. But it will take years for them to be deployed.
+One solution could be to ask equipment vendors to provide an open, programmable, virtualized platform on their switches and routers but it won’t happen. There is some open software platforms, but they do not have the performances required.
+So there is our solution : the OpenFlow Switch, which meet this four goals : high-performance and low cost implementation, capable of supporting a broad range of research, isolate experimental traffic from production traffic, consistent with vendors’ need for closed platforms.
+
+The OpenFlow Switch
+The idea is to use the flow-tables which are in most switch and routers by identifying a common set of function that run in many switch and routers. That provides an open protocol to program the flow-table in switches and routers. It allow to partition the traffic into production and research flows.
+An OpenFlow Switch has three parts : A Flow Table, with an action associated with each flow entry, a Secure Channel that connects the switch to a controller, and The OpenFlow Protocol which provides an open and standard way for a controller to communicate with a switch.
+A flow could be a TCP connection, or all packets from a particular MAC address or IP address, or all packets with the same VLAN tag, or all packets from the same switch port.
+All OpenFlow switches must at least have three actions for each flow-entry :
+1-Forward this flow’s packets to a given port
+2-Encapsulate and forward this flow’s packets to a controller. (typically for the first packet in a new flow)
+3-Drop this flow’s packet
+A flow in the Flow-Table has three fields : a packet header that defines the flow, the action decided by the controller for this flow, and statistic for this flow (number of packets/bytes and time since last packet)
+To separate production traffic of experimental traffic, openflow-enable switches must add a fourth action : forward this flow’s packets through the switch’s normal processing pipeline.
+A switch which support the header formats and the four basic actions is called a type 0 switch.
+A controller adds and removes flow-entries from the Flow Table.
+
+Using OpenFlow
+The principle is simple, to experiment something, the searcher just have to put a controller. When a flow using this protocol is detected, the first packet of this flow will be send to the controller which will add a flow-entry with the defined action.

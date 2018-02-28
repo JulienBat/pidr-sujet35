@@ -1,0 +1,19 @@
+Traditional networks contain lots of devices such as switches or routers and each of them needs to be individually configured. However, with the size of the networks ever growing, these manipulations become hardly efficient. As a result, software-designed networks (SDN) starts to appear.
+SDNs have a lot of advantages : everything is accessible and modifiable for a single interface and as a result, it has a great global view of all the network.
+However, nowadays protocols such as OpenFlow only supports low level interface and cannot do multiple tasks efficiently.
+Here comes the Frenetic project with three main objectives.
+Firstly, the querying of the network has to be lot easier. The second one is to change from low level language to high level. And last but not least, any modifications and reconfigurations of the network has to be secure and programmer-friendly.
+
+What is so great about these new queries?
+Mainly, the querying is now possible in high-level language. Programmers only need to ask whatever they want without worrying about the manner. Indeed, queries does not interact one with another.
+This high level language allow predicates such as "srcip!=1.2.3.4" to refuse all packets from an IP source address. Moreover, the system dynamically create rules so space in switches is not such a problem anymore. The annoying time frame between a packet reception and the rule installation can easily be control with traffic limits. And obtaining periodical statistics from any device can be done in just a few lines.
+
+Multitasking
+The main problem with multitasking is the interference between themselves. Frenetic language approach consists in modulating which make it easier to compose independent functions.
+Additionally, there is a run-time system efficiently checking if any problem of interference between tasks appear. Its effectiveness comes from its proactive behavior : the rules are installed before packets arrive to the switch (when possible). As a result, it is possible to filter for example IP like 90.80.*.60 .
+Furthermore, this run-time system can refine rules according to the traffic.
+
+Let us now talk about the consistent updates. Indeed, swap in policies are always dangerous times, as nor the ancient nor the new rules may apply.
+First, the per-packet consistent update : between policies switch every packet is ether manage by the old rules on all switches or by the new rules on all switches witch results in the trace property.
+Then there is a two-phase update for consistence. When entering in the network, every packet is marked with a version number which rules are installed on every switch. When there is no more packets with the old number version in the network, the old rules are then suppress from all switch.
+Additionally, to guaranty the per-flow consistency, Frenetic uses a combination of versioning and rule timeouts.

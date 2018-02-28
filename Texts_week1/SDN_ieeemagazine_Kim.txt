@@ -1,0 +1,39 @@
+Introduction
+It’s complicated to configure and manage a network due to the complexity of networks. Configurations environments are complicated, and operators must do the configuration in all equipments. Moreover, due to the constant changes in network, operators have to do this configurations really often.
+Here is Software Defined Networking (SDN). It gives a high level configuration interface with the possibility to configure the entire network in one time. With SDN, the network is separate in two, there is a “data plane” which have packet forwarding abilities, and a “control plane” which is a controller. That permit a centralized network configuration, and an easier configuration.
+
+SDN and OpenFlow
+Recent work introduced the notion of southbound and northbound interface. That’s basically the “two big layer” of SND.
+The southbound interface refers to the interface and protocol between programmable switches (SDN-capable switches) and the software controller. The northbound interface determines how to express and translate operational tasks and network policies into a form the controller can understand.
+OpenFlow is the most common southbound interface, and there is a lot of OpenFlow controller (NOX, Floodlight, Maestro…)
+
+Procera
+Procera is a northbound interface. It use a high level functional programming language to express event driven network policies. There is a set of control domains (Time, Data usage, Status, Traffic Flow) which can be associated to make appropriate packet forwarding actions.
+Procera use a policy language given by the operator to give policy functions to the Network controller. Then the network controller work with the data plane (openflow switchs) following the policy functions of the policy engine.
+
+Event Sources
+There is some network component or middleboxes which are called “event sources” which are used by procera to have informations about the network. That can be anything, procera may just have the corresponding parser.
+
+Policy Engine and Language
+Based on the given policy language and asynchronous events (send by the “event sources”), the policy engine refreshes its policy state, which defines the network policy to be enforced, and sends the policy functions to the network controller when the policy state changes.
+
+Network Controller
+The network controller translates the network policy to actual packet forwarding rules. It establishes a connection to each OpenFlow-capable switch through the OpenFlow protocol, and inserts, deletes, or modifies packet forwarding rules in switches through this connection. It also react on network modifications.
+
+Campus Network Deployment
+We already deployed a SDN based on Procera in Georgia Tech campus, which was a dynamic environments with many events occurring across the network.
+In Georgia Tech network, to have a full-access, every end-host must be authenticated. After the authentication, the device is scanned, and have a full access if there is no vulnerability, else, it have a limited access. That system works with differents VLAN, so Procera really simplifies the configuration.
+For the deployment, we used 5 openflow switches dispatched in 3 buildings, controlled by a central controller.
+
+Home Network Deployments
+We also deployed Procera in home.
+The challenge with home networks is that it’s very hard to measure the performance of the network.
+BISmark is a collection of home gateways which performs various types of measurements, collected in the centralized management and data collection server for further analysis.
+Due to the actual software installed in common home gateways, the introduction of new features into the home network is really hard. But with SDN it’s much easier. So by combining BYSmark and Procera, it’s possible to improve home traffic management.
+Home users must have a an interface which allow them to control their daily bandwidth usage, and for now, it’s not possible at a device level. But with a Procera system, it’s possible.
+The policy is simple, when a device is uncapped, it can access internet, and when it’s capped, it can’t. Procera make the device capped when is data usage exceeds the monthly limit chose by the user. And the device go back to uncapped automatically at the end of the month. Here, the wireless routers in households are the event sources. That system has been deployed in 10 households with openflow-capable wireless home gateway which communicates with an SDN controller at Georgia Tech.
+
+Future Work
+This 2 deployments demonstrate the feasibility of Procera, but more evaluation are required. For now, the most important issue is the delay caused by the interaction of the control plane and the data plane.
+Currently Procera has only four control domains, but it will be extended in the future.
+Procera is also limited by the OpenFlow 1.0.0 specification, and with new versions of OpenFlow, Procera will have more possible actions.
