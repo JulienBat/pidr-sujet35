@@ -1,0 +1,18 @@
+This document describes an automaton which can verify the control plane as well as the data plane in a SDN and if necessary deploy additional owns rules in order to protect the application user.
+So this approach focuses on the network traces of applications and is divided in three steps : network acquisition, network aggregation and automata learning.
+
+First at all, it collects the application flows using Flowoid (during the network acquisition) which are sent to the security manager.
+It uses the flows created by each application and not the packets because it is faster and respect the user privacy.
+Several informations are analyzed, mainly IP destination address and the port numbers.
+
+
+Then in order to regroup by properties and to reduce the number of states an transitions in the automaton, there is an aggregation phase.
+It focuses on the netnames and orgnames to aggregate. However netnames are to precise and orgnames to general.
+Therefore, if a netname appears many times, this information is important and conserved, else only the orgname is saved.
+For better results, the aggregation also applies on port number.
+
+
+Finally,  the automata learning phase builds the finite state machine. States are flows and transitions are the probability as succession between two flows.
+To compare this automata to others, we use two criteria the size of the automata and the number of rejected flows coming from others applications by the automata.
+So compared to  Synoptic, this approach create a much simpler automata and is similar to the Invarimint automata in size.
+As for the rejected number of flows, it is similar for the three approaches.

@@ -2,4 +2,9 @@ To face the ever-growing number of smart objects and the sharply increasing numb
 And software-defined networks (SDN) look to have interesting potential. In these SDN, lots of security functions are concentrated in the network. SDN separate the data plane, security functions in the switches from the control plane, all underlying mechanisms of automatic changes of the configuration of the data plane.
 This document specify about automated verification strategy, translating algorithms from security chains to formal models and evaluation of performance.
 
-Automated verification strategies main goal is to avoid any misconfiguration in the network. The purposed architecture contains three main groups : the target device connected to a cloud provider infrastructure which include most of the security functions and is connected  to the destination. A security manager, including SDN Controller and Synaptic Checker, check data plane coming from the Internet Cloud. Addionally, some security function to protect the control plane in adiionn to a Kinetic extension.
+Automated verification strategies main goal is to avoid any misconfiguration in the network by verifying both the control and the data plane.
+The purposed architecture contains three main groups : the target device connected to a cloud provider infrastructure which include most of the security functions and is connected  to the destination.
+All communications goes by a virtual switch which ask the controller for redirection. Then, the security manager the pushes the necessary rules into the network and respond to the switch.
+The proposed solution  uses Frenetic framework, especially Pyretic network programming language to verify if the properties are satisfied.
+In order to check the data plane, an created extension of Pyretic named Synaptic is used.
+It translates rules into mathematical models, SMT solving or model checking.
